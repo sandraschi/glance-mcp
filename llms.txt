@@ -1,0 +1,7 @@
+# glance-mcp
+
+- Source: https://github.com/sandraschi/glance-mcp
+- README: project overview, ports 10776/10777, tools, env vars.
+- Example feeds: docs/EXAMPLE_FEEDS.md (Simon Willison default; Schneier, hnRSS, etc.).
+- MCP tools: rss_fetch_feed, open_meteo_forecast, fleet_http_probe.
+- HTTP: GET /health, POST /api/rss/fetch, /api/weather/forecast, /api/probe; MCP path /mcp.

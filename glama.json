@@ -1,0 +1,5 @@
+{
+  "name": "glance-mcp",
+  "version": "0.2.0",
+  "description": "At-a-glance info in one MCP: a holdall for RSS/Atom, Open-Meteo weather, fleet /health probes, redirect tracing, and OPML→feeds — FastMCP 3.1."
+}
