@@ -53,6 +53,20 @@ REST mirrors: `POST /api/rss/fetch`, `/api/weather/forecast`, `/api/probe`, `/ap
 
 ---
 
+## Install
+
+**Repository:** [github.com/sandraschi/glance-mcp](https://github.com/sandraschi/glance-mcp). You need the project on disk before `uv sync` does anything useful:
+
+```powershell
+git clone https://github.com/sandraschi/glance-mcp.git
+Set-Location glance-mcp
+uv sync
+```
+
+Further commands assume your shell is at the **repository root**.
+
+---
+
 ## Run
 
 **Stdio (Cursor / Claude):**
