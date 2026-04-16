@@ -17,6 +17,7 @@ dependencies = [
     "defusedxml>=0.7",
     "fastapi>=0.115",
     "uvicorn[standard]>=0.32",
+    "prefab-ui>=0.14.0",
 ]
 
 [project.optional-dependencies]
