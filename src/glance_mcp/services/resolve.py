@@ -7,8 +7,7 @@ from urllib.parse import urljoin
 
 import httpx
 
-from glance_mcp.net_safety import assert_safe_for_probe
-from glance_mcp.net_safety import normalize_url
+from glance_mcp.net_safety import assert_safe_for_probe, normalize_url
 
 _REDIRECT_STATUSES = frozenset({301, 302, 303, 307, 308})
 

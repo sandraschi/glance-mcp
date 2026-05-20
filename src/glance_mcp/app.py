@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 
 from glance_mcp.config import load_settings
 from glance_mcp.server import mcp
-from glance_mcp.services import opml, probe, resolve, rss, weather
+from glance_mcp.services import opml, probe, resolve, rss, utilities, weather
 
 mcp_http = mcp.http_app(path="/mcp")
 
@@ -103,6 +103,35 @@ def build_app() -> FastAPI:
     @app.post("/api/opml/feeds")
     async def api_opml(body: OpmlBody) -> dict[str, Any]:
         return opml.list_feeds_from_opml(body.opml_xml)
+
+    # Dev utility REST endpoints
+    @app.get("/api/uuid")
+    async def api_uuid(version: int = 4) -> dict[str, Any]:
+        return await utilities.generate_uuid(version=version)
+
+    @app.post("/api/hash")
+    async def api_hash(text: str, algorithm: str = "sha256") -> dict[str, Any]:
+        return await utilities.hash_text(text, algorithm=algorithm)
+
+    @app.post("/api/base64/encode")
+    async def api_b64encode(text: str) -> dict[str, Any]:
+        return await utilities.base64_encode(text)
+
+    @app.post("/api/base64/decode")
+    async def api_b64decode(encoded: str) -> dict[str, Any]:
+        return await utilities.base64_decode(encoded)
+
+    @app.post("/api/json")
+    async def api_json(text: str, operation: str = "validate") -> dict[str, Any]:
+        return await utilities.json_tool(text, operation=operation)
+
+    @app.get("/api/jwt/decode")
+    async def api_jwt_decode(token: str) -> dict[str, Any]:
+        return await utilities.jwt_decode(token)
+
+    @app.get("/api/time")
+    async def api_time(timestamp: float | None = None) -> dict[str, Any]:
+        return await utilities.timestamp_info(timestamp)
 
     path = settings.mcp_http_path.strip() or "/mcp"
     app.mount(path, mcp_http)

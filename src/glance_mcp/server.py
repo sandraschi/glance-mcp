@@ -1,20 +1,35 @@
-"""FastMCP 3.1 tool registration."""
+"""FastMCP 3.2 tool registration — glance utilities, RSS/Atom, weather, fleet probes."""
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from fastmcp import FastMCP
+from fastmcp.server import create_proxy
 
-from glance_mcp.services import opml, probe, resolve, rss, weather
+from glance_mcp.services import opml, probe, resolve, rss, utilities, weather
 
 mcp = FastMCP(
     "glance-mcp",
     instructions=(
-        "Public-surface utilities: RSS/Atom feed fetch, OPML→feed URL list, HTTP redirect chain trace, "
-        "Open-Meteo weather (no API key), parallel GET probes for fleet /health endpoints."
+        "Dev utilities: UUID generation, hashing, base64, JSON format/validate, JWT decode, "
+        "URL encode/decode, text stats, timestamp conversion, random values. "
+        "Plus RSS/Atom fetch, Open-Meteo weather, fleet HTTP probes, redirect tracing, OPML import."
     ),
 )
+
+_bridge_proxies = []
+bridge_urls = os.getenv("MCP_BRIDGE_URLS", "")
+if bridge_urls:
+    for url in bridge_urls.split(","):
+        url = url.strip()
+        if url:
+            try:
+                mcp.add_provider(create_proxy(url))
+                _bridge_proxies.append(url)
+            except Exception:
+                pass
 
 
 @mcp.tool()
@@ -169,3 +184,160 @@ async def opml_list_feeds(opml_xml: str) -> dict[str, Any]:
             "error_type": type(e).__name__,
             "feeds": [],
         }
+
+
+# ── Dev utilities ─────────────────────────────────────────────────────────────
+
+
+@mcp.tool()
+async def generate_uuid(version: int = 4) -> dict[str, Any]:
+    """UUID — Generate a UUID v4 (random) or v7 (time-ordered).
+
+    Args:
+        version: 4 for random UUID, 7 for time-ordered UUID (default 4).
+
+    Returns:
+        The generated UUID string plus hex and URN forms.
+    """
+    return await utilities.generate_uuid(version=version)
+
+
+@mcp.tool()
+async def hash_text(text: str, algorithm: str = "sha256") -> dict[str, Any]:
+    """HASH — Hash a string using MD5, SHA1, SHA256, or SHA512.
+
+    Args:
+        text: The string to hash.
+        algorithm: md5, sha1, sha256, or sha512 (default sha256).
+
+    Returns:
+        Hex digest and algorithm info.
+    """
+    return await utilities.hash_text(text, algorithm=algorithm)
+
+
+@mcp.tool()
+async def base64_encode(text: str) -> dict[str, Any]:
+    """B64_ENCODE — Encode a string as base64.
+
+    Args:
+        text: The string to encode.
+
+    Returns:
+        Base64-encoded string.
+    """
+    return await utilities.base64_encode(text)
+
+
+@mcp.tool()
+async def base64_decode(encoded: str) -> dict[str, Any]:
+    """B64_DECODE — Decode a base64 string back to text.
+
+    Args:
+        encoded: The base64 string to decode.
+
+    Returns:
+        Decoded text or error if invalid.
+    """
+    return await utilities.base64_decode(encoded)
+
+
+@mcp.tool()
+async def json_tool(text: str, operation: str = "validate") -> dict[str, Any]:
+    """JSON — Validate, format, or minify a JSON string.
+
+    Args:
+        text: JSON string to process.
+        operation: validate, format, or minify (default validate).
+
+    Returns:
+        Validation status, formatted/minified output, and size metrics.
+    """
+    return await utilities.json_tool(text, operation=operation)
+
+
+@mcp.tool()
+async def jwt_decode(token: str) -> dict[str, Any]:
+    """JWT — Decode a JWT token without signature verification.
+
+    Args:
+        token: The JWT token string (3 dot-separated base64 sections).
+
+    Returns:
+        Decoded header, payload, and truncated signature.
+    """
+    return await utilities.jwt_decode(token)
+
+
+@mcp.tool()
+async def url_encode(text: str) -> dict[str, Any]:
+    """URL_ENCODE — Percent-encode a string for use in URLs.
+
+    Args:
+        text: The string to encode.
+
+    Returns:
+        URL-encoded string.
+    """
+    return await utilities.url_encode(text)
+
+
+@mcp.tool()
+async def url_decode(encoded: str) -> dict[str, Any]:
+    """URL_DECODE — Decode a percent-encoded URL string back to readable form.
+
+    Args:
+        encoded: The percent-encoded string.
+
+    Returns:
+        Decoded string.
+    """
+    return await utilities.url_decode(encoded)
+
+
+@mcp.tool()
+async def text_stats(text: str) -> dict[str, Any]:
+    """STATS — Count characters, words, lines, and sentences in text.
+
+    Args:
+        text: The text to analyze.
+
+    Returns:
+        Character, word, line, sentence, and byte counts.
+    """
+    return await utilities.text_stats(text)
+
+
+@mcp.tool()
+async def timestamp_info(timestamp: float | None = None, timezone: str = "UTC") -> dict[str, Any]:
+    """TIME — Convert a UNIX timestamp to human-readable date/time. Defaults to now.
+
+    Args:
+        timestamp: UNIX timestamp (seconds since epoch). Default: current time.
+        timezone: Not used yet (UTC only currently). Reserved param.
+
+    Returns:
+        ISO 8601, UTC date/time components, weekday, and UNIX ms.
+    """
+    return await utilities.timestamp_info(timestamp)
+
+
+@mcp.tool()
+async def random_value(
+    kind: str = "uuid",
+    length: int = 16,
+    min_val: int = 0,
+    max_val: int = 100,
+) -> dict[str, Any]:
+    """RANDOM — Generate random values: uuid, hex, password, int, float.
+
+    Args:
+        kind: uuid, hex, password, int, or float (default uuid).
+        length: Length for hex/password (default 16).
+        min_val: Minimum for int/float (default 0).
+        max_val: Maximum for int/float (default 100).
+
+    Returns:
+        The generated random value with metadata.
+    """
+    return await utilities.random_value(kind=kind, length=length, min_val=min_val, max_val=max_val)
