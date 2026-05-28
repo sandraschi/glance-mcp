@@ -16,3 +16,5 @@ FastMCP 3.1: RSS/Atom feeds, Open-Meteo weather (no API key), and HTTP health pr
 - `README.md` — full documentation
 - `pyproject.toml` — build config and entry points
 - `CLAUDE.md` — Claude Code context (if present)
+
+Install docs: follow mcp-central-docs/standards/AGENT_INSTALL_REFERENCE.md
