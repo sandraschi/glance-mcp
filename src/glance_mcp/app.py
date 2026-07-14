@@ -11,7 +11,7 @@ from glance_mcp.config import load_settings
 from glance_mcp.server import mcp
 from glance_mcp.services import opml, probe, resolve, rss, utilities, weather
 
-mcp_http = mcp.http_app(path="/mcp")
+mcp_http = mcp.http_app(path="/")
 
 
 class RssBody(BaseModel):

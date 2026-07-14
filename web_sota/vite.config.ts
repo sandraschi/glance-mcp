@@ -8,6 +8,7 @@ export default defineConfig({
     alias: { "@": path.resolve(__dirname, "./src") },
   },
   server: {
+    allowedHosts: ['goliath'],
     port: 10777,
     strictPort: true,
     host: "127.0.0.1",

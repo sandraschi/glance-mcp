@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { API_BASE } from "./lib/api";
+import FloatingChat from "./components/FloatingChat";
 
 import {
   DEFAULT_EXAMPLE_FEED_URL,
@@ -211,6 +213,7 @@ export default function App() {
           )}
         </div>
       </main>
+      <FloatingChat />
     </div>
   );
 }
@@ -239,7 +242,7 @@ function RssPanel() {
     setBusy(true);
     setData(null);
     try {
-      const r = await fetch("/api/rss/fetch", {
+      const r = await fetch(API_BASE + "/api/rss/fetch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ feed_url: url, max_items: 25 }),
@@ -414,7 +417,7 @@ function ResolvePanel() {
     setBusy(true);
     setData(null);
     try {
-      const r = await fetch("/api/resolve/trace", {
+      const r = await fetch(API_BASE + "/api/resolve/trace", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -548,7 +551,7 @@ function OpmlPanel() {
     setBusy(true);
     setData(null);
     try {
-      const r = await fetch("/api/opml/feeds", {
+      const r = await fetch(API_BASE + "/api/opml/feeds", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ opml_xml: xml }),
@@ -677,7 +680,7 @@ function WeatherPanel({
         disabled={busy}
         style={{ marginTop: 12, padding: "8px 16px", borderRadius: 8, cursor: busy ? "wait" : "pointer" }}
         onClick={() =>
-          onRun("/api/weather/forecast", {
+          onRun(API_BASE + "/api/weather/forecast", {
             latitude: parseFloat(lat),
             longitude: parseFloat(lon),
             timezone: "auto",
@@ -721,7 +724,7 @@ function ProbePanel() {
       .map((s) => s.trim())
       .filter(Boolean);
     try {
-      const r = await fetch("/api/probe", {
+      const r = await fetch(API_BASE + "/api/probe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
