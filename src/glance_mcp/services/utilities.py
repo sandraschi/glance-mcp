@@ -34,9 +34,9 @@ async def hash_text(text: str, algorithm: str = "sha256") -> dict[str, Any]:
     alg = algorithm.lower()
     data = text.encode("utf-8")
     if alg == "md5":
-        h = hashlib.md5(data)  # noqa: S324
+        h = hashlib.md5(data)
     elif alg == "sha1":
-        h = hashlib.sha1(data)  # noqa: S324
+        h = hashlib.sha1(data)
     elif alg == "sha256":
         h = hashlib.sha256(data)
     elif alg == "sha512":
@@ -72,8 +72,12 @@ async def json_tool(text: str, operation: str = "validate") -> dict[str, Any]:
         return {"success": True, "valid": True, "type": type(parsed).__name__}
     elif operation == "format":
         formatted = json.dumps(parsed, indent=2, ensure_ascii=False)
-        return {"success": True, "formatted": formatted,
-                "original_length": len(text), "formatted_length": len(formatted)}
+        return {
+            "success": True,
+            "formatted": formatted,
+            "original_length": len(text),
+            "formatted_length": len(formatted),
+        }
     elif operation == "minify":
         minified = json.dumps(parsed, separators=(",", ":"), ensure_ascii=False)
         return {"success": True, "minified": minified, "original_length": len(text), "minified_length": len(minified)}
@@ -97,12 +101,14 @@ async def jwt_decode(token: str) -> dict[str, Any]:
 async def url_encode(text: str) -> dict[str, Any]:
     """URL-percent-encode a string."""
     from urllib.parse import quote
+
     return {"success": True, "encoded": quote(text, safe=""), "original": text}
 
 
 async def url_decode(encoded: str) -> dict[str, Any]:
     """Decode a URL-percent-encoded string."""
     from urllib.parse import unquote
+
     return {"success": True, "decoded": unquote(encoded), "original": encoded}
 
 
@@ -157,15 +163,20 @@ async def random_value(
         return {"success": True, "kind": "hex", "value": random.randbytes(length).hex(), "length": length}
     elif k == "password":
         chars = string.ascii_letters + string.digits + "!@#$%^&*"
-        return {"success": True, "kind": "password",
-                "value": "".join(random.choice(chars) for _ in range(length)),
-                "length": length}
+        return {
+            "success": True,
+            "kind": "password",
+            "value": "".join(random.choice(chars) for _ in range(length)),
+            "length": length,
+        }
     elif k == "int":
-        return {"success": True, "kind": "int", "value": random.randint(min_val, max_val),
-                "range": [min_val, max_val]}
+        return {"success": True, "kind": "int", "value": random.randint(min_val, max_val), "range": [min_val, max_val]}
     elif k == "float":
-        return {"success": True, "kind": "float",
-                "value": random.uniform(min_val, max_val),
-                "range": [min_val, max_val]}
+        return {
+            "success": True,
+            "kind": "float",
+            "value": random.uniform(min_val, max_val),
+            "range": [min_val, max_val],
+        }
     else:
         return {"success": False, "error": f"Unknown kind: {kind}. Use uuid, hex, password, int, float."}
