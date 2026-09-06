@@ -62,8 +62,7 @@ install:
     uv sync
 
 install-web:
-    cd web_sota
-    npm install
+    cd web_sota; npm install
 
 web start:
     .\web_sota\start.ps1
