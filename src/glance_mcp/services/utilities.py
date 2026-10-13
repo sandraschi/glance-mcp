@@ -1,5 +1,5 @@
-"""Pure utility functions — no external deps, no API keys, no network."""
-# ruff: noqa: S311 — non-cryptographic random is acceptable for these tools
+"""Pure utility functions - no external deps, no API keys, no network."""
+# ruff: noqa: S311 - non-cryptographic random is acceptable for these tools
 
 from __future__ import annotations
 
@@ -89,7 +89,7 @@ async def jwt_decode(token: str) -> dict[str, Any]:
     """Decode a JWT token without signature verification."""
     parts = token.split(".")
     if len(parts) != 3:
-        return {"success": False, "error": "Invalid JWT format — expected 3 dot-separated sections"}
+        return {"success": False, "error": "Invalid JWT format - expected 3 dot-separated sections"}
     try:
         header = json.loads(base64.urlsafe_b64decode(parts[0] + "==").decode("utf-8"))
         payload = json.loads(base64.urlsafe_b64decode(parts[1] + "==").decode("utf-8"))

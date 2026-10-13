@@ -1,4 +1,4 @@
-"""FastMCP 3.2 tool registration — glance utilities, RSS/Atom, weather, fleet probes."""
+"""FastMCP 3.2 tool registration - glance utilities, RSS/Atom, weather, fleet probes."""
 
 from __future__ import annotations
 
@@ -34,14 +34,14 @@ if bridge_urls:
 
 @mcp.tool()
 async def rss_fetch_feed(feed_url: str, max_items: int = 25) -> dict[str, Any]:
-    """RSS_FETCH_FEED — Download and parse an RSS or Atom feed (titles, links, summaries).
+    """RSS_FETCH_FEED - Download and parse an RSS or Atom feed (titles, links, summaries).
 
     PORTMANTEAU RATIONALE: RSS/Atom remains widely used (podcasts, blogs, newsrooms, GitHub releases).
     Agents use this to monitor sources without bespoke scrapers.
 
     Args:
         feed_url: HTTPS feed URL (Atom/RSS). Public internet by default; use GLANCE_RSS_ALLOW_PRIVATE_HOSTS=1 for LAN.
-        max_items: Max entries to return (1–100).
+        max_items: Max entries to return (1-100).
 
     Returns:
         success, entries, feed_title, message; or error details.
@@ -65,13 +65,13 @@ async def open_meteo_forecast(
     timezone: str = "auto",
     forecast_days: int = 3,
 ) -> dict[str, Any]:
-    """OPEN_METEO_FORECAST — Grid weather from Open-Meteo (no API key; HTTPS only).
+    """OPEN_METEO_FORECAST - Grid weather from Open-Meteo (no API key; HTTPS only).
 
     Args:
         latitude: WGS84 latitude.
         longitude: WGS84 longitude.
         timezone: IANA zone or \"auto\" (Open-Meteo resolves from coordinates).
-        forecast_days: 1–16 days of daily/hourly context (API-limited).
+        forecast_days: 1-16 days of daily/hourly context (API-limited).
 
     Returns:
         success, current/hourly blocks, timezone; or error.
@@ -97,14 +97,14 @@ async def fleet_http_probe(
     timeout_seconds: float = 5.0,
     max_concurrency: int = 12,
 ) -> dict[str, Any]:
-    """FLEET_HTTP_PROBE — Parallel GET for MCP /health or status URLs (localhost + LAN allowed).
+    """FLEET_HTTP_PROBE - Parallel GET for MCP /health or status URLs (localhost + LAN allowed).
 
     Blocks cloud metadata endpoints (169.254.169.254). Use for quick fleet dashboards.
 
     Args:
         urls: List of http(s) URLs (e.g. http://127.0.0.1:10746/health).
-        timeout_seconds: Per-request timeout (0.5–60).
-        max_concurrency: Parallel connection cap (1–32).
+        timeout_seconds: Per-request timeout (0.5-60).
+        max_concurrency: Parallel connection cap (1-32).
 
     Returns:
         success, results[] with ok, status_code, elapsed_ms, body_preview.
@@ -131,13 +131,13 @@ async def http_redirect_trace(
     timeout_seconds: float = 20.0,
     method: str = "head",
 ) -> dict[str, Any]:
-    """HTTP_REDIRECT_TRACE — Follow http(s) redirects hop-by-hop; same allowlist as fleet probe.
+    """HTTP_REDIRECT_TRACE - Follow http(s) redirects hop-by-hop; same allowlist as fleet probe.
 
     Use HEAD by default (lighter). Switch to GET if the server returns 405.
 
     Args:
         url: Starting URL.
-        max_hops: Max redirect follows (1–30).
+        max_hops: Max redirect follows (1-30).
         timeout_seconds: Per-request timeout.
         method: \"head\" or \"get\".
 
@@ -165,7 +165,7 @@ async def http_redirect_trace(
 
 @mcp.tool()
 async def opml_list_feeds(opml_xml: str) -> dict[str, Any]:
-    """OPML_LIST_FEEDS — Parse OPML XML text; return outline rows with xmlUrl (Atom/RSS feed URLs).
+    """OPML_LIST_FEEDS - Parse OPML XML text; return outline rows with xmlUrl (Atom/RSS feed URLs).
 
     Safe XML via defusedxml. Use for importing subscription lists into rss_fetch_feed.
 
@@ -191,7 +191,7 @@ async def opml_list_feeds(opml_xml: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def generate_uuid(version: int = 4) -> dict[str, Any]:
-    """UUID — Generate a UUID v4 (random) or v7 (time-ordered).
+    """UUID - Generate a UUID v4 (random) or v7 (time-ordered).
 
     Args:
         version: 4 for random UUID, 7 for time-ordered UUID (default 4).
@@ -204,7 +204,7 @@ async def generate_uuid(version: int = 4) -> dict[str, Any]:
 
 @mcp.tool()
 async def hash_text(text: str, algorithm: str = "sha256") -> dict[str, Any]:
-    """HASH — Hash a string using MD5, SHA1, SHA256, or SHA512.
+    """HASH - Hash a string using MD5, SHA1, SHA256, or SHA512.
 
     Args:
         text: The string to hash.
@@ -218,7 +218,7 @@ async def hash_text(text: str, algorithm: str = "sha256") -> dict[str, Any]:
 
 @mcp.tool()
 async def base64_encode(text: str) -> dict[str, Any]:
-    """B64_ENCODE — Encode a string as base64.
+    """B64_ENCODE - Encode a string as base64.
 
     Args:
         text: The string to encode.
@@ -231,7 +231,7 @@ async def base64_encode(text: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def base64_decode(encoded: str) -> dict[str, Any]:
-    """B64_DECODE — Decode a base64 string back to text.
+    """B64_DECODE - Decode a base64 string back to text.
 
     Args:
         encoded: The base64 string to decode.
@@ -244,7 +244,7 @@ async def base64_decode(encoded: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def json_tool(text: str, operation: str = "validate") -> dict[str, Any]:
-    """JSON — Validate, format, or minify a JSON string.
+    """JSON - Validate, format, or minify a JSON string.
 
     Args:
         text: JSON string to process.
@@ -258,7 +258,7 @@ async def json_tool(text: str, operation: str = "validate") -> dict[str, Any]:
 
 @mcp.tool()
 async def jwt_decode(token: str) -> dict[str, Any]:
-    """JWT — Decode a JWT token without signature verification.
+    """JWT - Decode a JWT token without signature verification.
 
     Args:
         token: The JWT token string (3 dot-separated base64 sections).
@@ -271,7 +271,7 @@ async def jwt_decode(token: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def url_encode(text: str) -> dict[str, Any]:
-    """URL_ENCODE — Percent-encode a string for use in URLs.
+    """URL_ENCODE - Percent-encode a string for use in URLs.
 
     Args:
         text: The string to encode.
@@ -284,7 +284,7 @@ async def url_encode(text: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def url_decode(encoded: str) -> dict[str, Any]:
-    """URL_DECODE — Decode a percent-encoded URL string back to readable form.
+    """URL_DECODE - Decode a percent-encoded URL string back to readable form.
 
     Args:
         encoded: The percent-encoded string.
@@ -297,7 +297,7 @@ async def url_decode(encoded: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def text_stats(text: str) -> dict[str, Any]:
-    """STATS — Count characters, words, lines, and sentences in text.
+    """STATS - Count characters, words, lines, and sentences in text.
 
     Args:
         text: The text to analyze.
@@ -310,7 +310,7 @@ async def text_stats(text: str) -> dict[str, Any]:
 
 @mcp.tool()
 async def timestamp_info(timestamp: float | None = None, timezone: str = "UTC") -> dict[str, Any]:
-    """TIME — Convert a UNIX timestamp to human-readable date/time. Defaults to now.
+    """TIME - Convert a UNIX timestamp to human-readable date/time. Defaults to now.
 
     Args:
         timestamp: UNIX timestamp (seconds since epoch). Default: current time.
@@ -329,7 +329,7 @@ async def random_value(
     min_val: int = 0,
     max_val: int = 100,
 ) -> dict[str, Any]:
-    """RANDOM — Generate random values: uuid, hex, password, int, float.
+    """RANDOM - Generate random values: uuid, hex, password, int, float.
 
     Args:
         kind: uuid, hex, password, int, or float (default uuid).
