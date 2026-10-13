@@ -1,0 +1,53 @@
+{
+  "manifest_version": "0.2",
+  "name": "glance-mcp",
+  "version": "0.2.0",
+  "description": "FastMCP 3.1: RSS/Atom feeds, Open-Meteo weather (no API key), and HTTP health probes for local fleet — minimal keys, httpx + feedparser.",
+  "author": { "name": "Sandra Schieder" },
+  "server": {
+    "type": "python",
+    "entry_point": "src/glance_mcp/__main__.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": ["run","--directory","${PWD}","python","-m","glance_mcp"],
+      "env": {
+        "PYTHONPATH": "${PWD}/src",
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  },
+  "tools": [
+    { "name": "health", "description": "health" },
+    { "name": "root", "description": "root" },
+    { "name": "api_rss", "description": "api_rss" },
+    { "name": "api_weather", "description": "api_weather" },
+    { "name": "api_probe", "description": "api_probe" },
+    { "name": "api_resolve", "description": "api_resolve" },
+    { "name": "api_opml", "description": "api_opml" },
+    { "name": "api_uuid", "description": "api_uuid" },
+    { "name": "api_hash", "description": "api_hash" },
+    { "name": "api_b64encode", "description": "api_b64encode" },
+    { "name": "api_b64decode", "description": "api_b64decode" },
+    { "name": "api_json", "description": "api_json" },
+    { "name": "api_jwt_decode", "description": "api_jwt_decode" },
+    { "name": "api_time", "description": "api_time" },
+    { "name": "build_app_head", "description": "build_app(head)" },
+    { "name": "build_app_get", "description": "build_app(get)" },
+    { "name": "rss_fetch_feed", "description": "rss_fetch_feed" },
+    { "name": "open_meteo_forecast", "description": "open_meteo_forecast" },
+    { "name": "fleet_http_probe", "description": "fleet_http_probe" },
+    { "name": "http_redirect_trace", "description": "http_redirect_trace" },
+    { "name": "opml_list_feeds", "description": "opml_list_feeds" },
+    { "name": "generate_uuid", "description": "generate_uuid" },
+    { "name": "hash_text", "description": "hash_text" },
+    { "name": "base64_encode", "description": "base64_encode" },
+    { "name": "base64_decode", "description": "base64_decode" },
+    { "name": "json_tool", "description": "json_tool" },
+    { "name": "jwt_decode", "description": "jwt_decode" },
+    { "name": "url_encode", "description": "url_encode" },
+    { "name": "url_decode", "description": "url_decode" },
+    { "name": "text_stats", "description": "text_stats" },
+    { "name": "timestamp_info", "description": "timestamp_info" },
+    { "name": "random_value", "description": "random_value" }
+  ]
+}
