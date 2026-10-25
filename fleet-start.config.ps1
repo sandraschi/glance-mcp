@@ -2,8 +2,8 @@
 # Edit ports/backend target here - start.ps1 is fleet-standard.
 @{
     Name         = 'glance-mcp'
-    BackendPort  = 0
-    FrontendPort = 0
+    BackendPort  = 10776
+    FrontendPort = 10777
     HealthPath   = '/health'
     WebRoot      = 'web_sota'
     Backend = @{
