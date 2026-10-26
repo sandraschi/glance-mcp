@@ -17,6 +17,12 @@ app = FastAPI(title="glance-mcp", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 
+@app.get("/api/health")
+async def api_health():
+    """Fleet launcher contract: liveness probe (start.ps1 HealthPath)."""
+    return {"status": "ok", "service": "glance-mcp"}
+
+
 @app.get("/api/llm/providers")
 async def llm_providers():
     providers = []
